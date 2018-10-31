@@ -11,7 +11,7 @@ import (
 
 	"fmt"
 
-	"library/Lchain3/utils"
+	"library/Chain3Go/utils"
 )
 
 //网络请求结构体
@@ -31,13 +31,13 @@ func NewHttpProvider(address string, timeout int8) *HttpProvider {
 }
 
 //发送网络请求
-func (hProvider *HttpProvider) SendRequest(relust interface{}, method string, params interface{}) error {
+func (hProvider *HttpProvider) SendRequest(relust interface{}, method string, params interface{}, netNumber int) error {
 
 	bodyStr := utils.JsonRpc{
 		Version: "2.0",
 		Method:  method,
 		Params:  params,
-		Id:      99,
+		Id:      netNumber,
 	}
 
 	body := strings.NewReader(bodyStr.AsJsonString())

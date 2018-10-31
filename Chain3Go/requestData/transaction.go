@@ -4,7 +4,7 @@ package requestData
 import (
 	"reflect"
 
-	"library/Lchain3/types"
+	"library/Chain3Go/types"
 )
 
 // TransactionParameters GO transaction to make more easy controll the parameters

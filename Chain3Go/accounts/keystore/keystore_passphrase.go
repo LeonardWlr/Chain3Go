@@ -1,34 +1,35 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The MOAC-core Authors
+// This file is part of the MOAC-core library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The MOAC-core library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The MOAC-core library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the MOAC-core library. If not, see <http://www.gnu.org/licenses/>.
 
 /*
 
 This key store behaves as KeyStorePlain with the difference that
 the private key is encrypted and on disk uses another JSON encoding.
 
-The crypto is documented at https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
+The crypto is documented at https://github.com/moacnode/wiki/wiki/Web3-Secret-Storage-Definition
 
 */
 
 package keystore
 
 import (
+	"errors"
+
 	"bytes"
 	"crypto/aes"
-	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -36,10 +37,10 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/randentropy"
+	"github.com/innowells/moac-lib/common"
+	"github.com/innowells/moac-lib/common/math"
+	"github.com/innowells/moac-lib/crypto"
+	"github.com/innowells/moac-lib/crypto/randentropy"
 	"github.com/pborman/uuid"
 	"golang.org/x/crypto/pbkdf2"
 	"golang.org/x/crypto/scrypt"
@@ -89,12 +90,6 @@ func (ks keyStorePassphrase) GetKey(addr common.Address, filename, auth string) 
 		return nil, fmt.Errorf("key content mismatch: have account %x, want %x", key.Address, addr)
 	}
 	return key, nil
-}
-
-// StoreKey generates a key, encrypts with 'auth' and stores in the given directory
-func StoreKey(dir, auth string, scryptN, scryptP int) (common.Address, error) {
-	_, a, err := storeNewKey(&keyStorePassphrase{dir, scryptN, scryptP}, crand.Reader, auth)
-	return a.Address, err
 }
 
 func (ks keyStorePassphrase) StoreKey(filename string, key *Key, auth string) error {
@@ -230,7 +225,7 @@ func decryptKeyV3(keyProtected *encryptedKeyJSONV3, auth string) (keyBytes []byt
 
 	calculatedMAC := crypto.Keccak256(derivedKey[16:32], cipherText)
 	if !bytes.Equal(calculatedMAC, mac) {
-		return nil, nil, ErrDecrypt
+		return nil, nil, errors.New("失败")
 	}
 
 	plainText, err := aesCTRXOR(derivedKey[:16], cipherText, iv)
@@ -264,7 +259,7 @@ func decryptKeyV1(keyProtected *encryptedKeyJSONV1, auth string) (keyBytes []byt
 
 	calculatedMAC := crypto.Keccak256(derivedKey[16:32], cipherText)
 	if !bytes.Equal(calculatedMAC, mac) {
-		return nil, nil, ErrDecrypt
+		return nil, nil, errors.New("失败")
 	}
 
 	plainText, err := aesCBCDecrypt(crypto.Keccak256(derivedKey[:16])[:16], cipherText, iv)
@@ -281,6 +276,8 @@ func getKDFKey(cryptoJSON cryptoJSON, auth string) ([]byte, error) {
 		return nil, err
 	}
 	dkLen := ensureInt(cryptoJSON.KDFParams["dklen"])
+
+	// fmt.Printf("dklen:%d, %x\n", dkLen, dkLen)
 
 	if cryptoJSON.KDF == keyHeaderKDF {
 		n := ensureInt(cryptoJSON.KDFParams["n"])

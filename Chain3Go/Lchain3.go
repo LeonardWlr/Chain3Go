@@ -4,9 +4,11 @@ package Lchain3
 import (
 	//	"fmt"
 
-	"library/Lchain3/netServe"
-	"library/Lchain3/requestData"
-	"library/Lchain3/types"
+	//	"math/big"
+
+	"library/Chain3Go/netServe"
+	"library/Chain3Go/requestData"
+	"library/Chain3Go/types"
 )
 
 var (
@@ -17,9 +19,13 @@ type RpcClient struct {
 	tmpRpcClient netServe.ProviderInterface
 }
 
-// 创建Lchain3.RpcClient结构对象
-func NewRpcClient(address string) *RpcClient {
+//网络状态 99:测试网 101:正式网
+var net int = 101
 
+// 创建Lchain3.RpcClient结构对象
+func NewRpcClient(address string, netNumber int) *RpcClient {
+
+	net = netNumber
 	rpcClient = netServe.NewHttpProvider(address, 10)
 	return &RpcClient{}
 }
@@ -39,7 +45,7 @@ func (rpcCli *RpcClient) Mc() *RpcClient {
 func (rpcCli *RpcClient) netServeHandler(method string, params interface{}) (*requestData.RequestResult, error) {
 
 	pointer := new(requestData.RequestResult)
-	err := rpcCli.tmpRpcClient.SendRequest(pointer, method, params)
+	err := rpcCli.tmpRpcClient.SendRequest(pointer, method, params, net)
 	return pointer, err
 }
 
@@ -284,13 +290,13 @@ func (rpcCli *RpcClient) MC_blockNumber() (int64, error) {
  *Returns
  *QUANTITY - integer of the current balance in sha.
  */
-func (rpcCli *RpcClient) MC_getBalance(address, number string) (int64, error) {
+func (rpcCli *RpcClient) MC_getBalance(address, number string) (string, error) {
 
 	pointer, err := rpcCli.netServeHandler(MC_getBalance, []string{address, number})
 	if err != nil {
-		return 0, err
+		return "", err
 	}
-	return pointer.ToInt()
+	return pointer.ToString()
 }
 
 /*

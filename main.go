@@ -4,17 +4,18 @@ package main
 import (
 	//	"encoding/json"
 	"fmt"
+	//	"math/big"
 
-	"library/Lchain3"
-	//	"library/Lchain3/requestData"
-	//	"library/Lchain3/accounts/keystore"
+	"library/Chain3Go"
+	//	"library/Chain3Go/utils"
+	//	"library/Chain3Go/requestData"
 )
 
 func main() {
 
 	var rpcClient *Lchain3.RpcClient
 	//	rpcClient = Lchain3.NewRpcClient("http://192.168.3.35:50066")
-	rpcClient = Lchain3.NewRpcClient("http://192.168.3.9:8545")
+	rpcClient = Lchain3.NewRpcClient("http://47.107.99.26:8545", 99)
 
 	//	fmt.Println(rpcClient.Mc().CHAIN3_clientVersion())
 	//	fmt.Println(rpcClient.Mc().CHAIN3_sha3("123"))
@@ -29,7 +30,7 @@ func main() {
 	//	fmt.Println(rpcClient.Mc().MC_gasPrice())
 	//	fmt.Println(rpcClient.Mc().MC_accounts())
 	//	fmt.Println(rpcClient.Mc().MC_blockNumber())
-	//	fmt.Println(rpcClient.Mc().MC_getBalance("0xd58592114ebd97525856929d5c662b72d58b767b", "latest"))
+	//	fmt.Println(rpcClient.Mc().MC_getBalance("0x955687b78de0a7336d144138dabc4de419d5bc41", "latest"))
 	//	fmt.Println(rpcClient.Mc().MC_getStorageAt("0xd58592114ebd97525856929d5c662b72d58b767b", "0x1", "latest"))
 	//	fmt.Println(rpcClient.Mc().MC_getTransactionCount("0xd58592114ebd97525856929d5c662b72d58b767b", "latest"))
 	//	fmt.Println(rpcClient.Mc().MC_getBlockTransactionCountByHash("0x0f2b4da92a7ffd6e47d71a59022c7c8dddea3d38ab01e26663188122014a7fde"))
@@ -50,7 +51,7 @@ func main() {
 	//	fmt.Println(rpcClient.Mc().MC_sendTransaction(trData))
 	//	fmt.Println(rpcClient.Mc().PERSONAL_lockAccount("0xd58592114ebd97525856929d5c662b72d58b767b"))
 
-	fmt.Println(rpcClient.Mc().PERSONAL_unlockAccount("0xd58592114ebd97525856929d5c662b72d58b767b", "Wlr7523286"))
+	//	fmt.Println(rpcClient.Mc().PERSONAL_unlockAccount("0xd58592114ebd97525856929d5c662b72d58b767b", "Wlr7523286"))
 	//	fmt.Println(rpcClient.Mc().PERSONAL_unlockAccount("0x7419C28e9283369FF7bEb8B3E9d1B8F622A9DCB2", "Wlr7523286"))
 	//	trData := new(requestData.TransactionParameters)
 	//	trData.From = "0xd58592114ebd97525856929d5c662b72d58b767b"
@@ -97,6 +98,8 @@ func main() {
 	//	fmt.Println(rpcClient.Mc().MC_getLogs([]string{"0x1d82393d72c9537c8275f85650e1dada"}))
 	//	fmt.Println(rpcClient.Mc().MC_getWork())
 
+	fmt.Println(rpcClient.Mc().VNODE_serviceCfg())
+
 	//	fmt.Println(rpcClient.Mc().SCS_getBlock("0x8d3a5eC8EE86262790bed060f8751851173F1112", "0x186a0"))
 	//	fmt.Println(rpcClient.Mc().SCS_getBlockNumber("0x8d3a5eC8EE86262790bed060f8751851173F1112"))
 	//	fmt.Println(rpcClient.Mc().SCS_getDappState("0x8d3a5eC8EE86262790bed060f8751851173F1112"))
@@ -119,4 +122,5 @@ func main() {
 	//	trData.Data = "0x"
 	//	fmt.Println(rpcClient.Mc().PERSONAL_sendTransaction(trData, "Wlr7523286"))
 
+	//	fmt.Println(utils.CreateKeystoreAddress("Wlr7523286"))
 }

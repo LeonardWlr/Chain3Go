@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"library/Lchain3/constants"
-	"library/Lchain3/types"
+	"library/Chain3Go/constants"
+	"library/Chain3Go/types"
 )
 
 type RequestResult struct {
