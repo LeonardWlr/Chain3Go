@@ -1,4 +1,4 @@
-// types.go project types.go.go
+// types project types.go
 package types
 
 import (

@@ -11,7 +11,7 @@ import (
 
 	"fmt"
 
-	"library/Chain3Go/utils"
+	"serverLayer/Chain3Go/utils"
 )
 
 //网络请求结构体
@@ -49,6 +49,10 @@ func (hProvider *HttpProvider) SendRequest(relust interface{}, method string, pa
 	if err != nil {
 		return err
 	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
+
 	netCli := &http.Client{
 		Timeout: time.Second * time.Duration(hProvider.timeout),
 	}

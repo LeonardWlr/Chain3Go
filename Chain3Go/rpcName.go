@@ -1,5 +1,5 @@
-// Lchain3 project rpcName.go
-package Lchain3
+// Chain3Go project rpcName.go
+package Chain3Go
 
 //jsonRPC名
 const (
@@ -70,4 +70,8 @@ const (
 	PERSONAL_sign            = "personal_sign"
 	PERSONAL_ecRecover       = "personal_ecRecover"
 	PERSONAL_sendTransaction = "personal_sendTransaction"
+
+	ScsRPCMethod_GetBalance     = "ScsRPCMethod.GetBalance"
+	ScsRPCMethod_GetNonce       = "ScsRPCMethod.GetNonce"
+	ScsRPCMethod_GetBlockNumber = "ScsRPCMethod.GetBlockNumber"
 )
